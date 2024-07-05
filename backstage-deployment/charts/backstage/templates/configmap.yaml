@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backstage-config
+data:
+  app-config.yaml: |
+    app:
+      baseUrl: {{ .Values.appConfig.app.baseUrl }}
+    backend:
+      baseUrl: {{ .Values.appConfig.backend.baseUrl }}
+      listen:
+        port: {{ .Values.appConfig.backend.listen.port }}
+    database:
+      client: {{ .Values.appConfig.database.client }}
+      connection:
+        host: {{ .Values.appConfig.database.connection.host }}
+        port: {{ .Values.appConfig.database.connection.port }}
+        user: {{ .Values.appConfig.database.connection.user }}
+        password: {{ .Values.appConfig.database.connection.password }}
+        database: {{ .Values.appConfig.database.connection.database }}
+    techdocs:
+      builder: {{ .Values.appConfig.techdocs.builder }}
+      publisher:
+        type: {{ .Values.appConfig.techdocs.publisher.type }}
+        local:
+          storagePath: {{ .Values.appConfig.techdocs.publisher.local.storagePath }}
+    auth:
+      environment: {{ .Values.appConfig.auth.environment }}
+      providers:
+        google:
+          clientId: {{ .Values.appConfig.auth.providers.google.clientId }}
+          clientSecret: {{ .Values.appConfig.auth.providers.google.clientSecret }}

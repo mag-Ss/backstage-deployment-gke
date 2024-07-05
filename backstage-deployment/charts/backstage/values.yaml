@@ -1,0 +1,53 @@
+replicas: 1
+image:
+  registry: ghcr.io
+  repository: backstage/backstage
+  tag: latest
+  pullPolicy: Always
+containerPorts:
+  backend: 7007
+appConfig:
+  app:
+    baseUrl: https://backstage.example.com
+  backend:
+    baseUrl: https://backstage.example.com/api
+    listen:
+      port: 7007
+  database:
+    client: pg
+    connection:
+      host: backstage-postgresql
+      port: 5432
+      user: default_user
+      password: default_password
+      database: default_db
+  techdocs:
+    builder: 'local'
+    publisher:
+      type: 'local'
+      local:
+        storagePath: /tmp/techdocs
+  auth:
+    environment: production
+    providers:
+      google:
+        clientId: ${AUTH_GOOGLE_CLIENT_ID}
+        clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
+extraEnvVars:
+- name: AUTH_GOOGLE_CLIENT_ID
+  valueFrom:
+    secretKeyRef:
+      name: backstage-secrets
+      key: AUTH_GOOGLE_CLIENT_ID
+- name: AUTH_GOOGLE_CLIENT_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: backstage-secrets
+      key: AUTH_GOOGLE_CLIENT_SECRET
+extraEnvVarsSecrets:
+- backstage-secrets
+ingress:
+  host: backstage.example.com
+  tls:
+    enabled: true
+    secretName: backstage-tls
